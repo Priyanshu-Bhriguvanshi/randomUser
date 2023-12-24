@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Api Advance</title>
+    <style>
+        body {
+            background-color: #414141;
+            color: #fff;
+        }
+
+        #images {
+            height: 200px;
+            width: 200px;
+            border: 10px;
+            border-radius: 20px;
+            background-color: aqua;
+        }
+
+        #next-but {
+            padding: 2;
+            margin: 20px;
+            margin-left: 60px;
+            /* background-color: non; */
+            border-radius: 10px;
+            height: 30px;
+            width: 100px;
+            border: 5px, solid, aqua;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="images"></div>
+    <button id="next-but">Next User</button>
+    <div id="user-detail">
+        <p class="name"></p>
+        <p class="gender"></p>
+        <p class="email"></p>
+        <p class="contact"></p>
+        <p class="address"></p>
+        
+
+    </div>
+
+
+</body>
+<script>
+    const image = document.querySelector('#images')
+    const name = document.querySelector('.name')
+    const gender = document.querySelector('.gender')
+    const email = document.querySelector('.email')
+    const contact = document.querySelector('.contact')
+    const address = document.querySelector('.address')
+    const nextUser = document.querySelector('#next-but')
+    const apiString = "https://randomuser.me/api/"
+    const requestApi = new XMLHttpRequest();
+    const nextFunction = function () {
+        requestApi.open('GET', apiString)
+        requestApi.onreadystatechange = function () {
+            console.log(requestApi.readyState)
+            if (requestApi.readyState === 4) {
+                const response = JSON.parse(this.responseText)
+                console.log(typeof response)
+
+                const imageUrl = response.results[0].picture.large
+                const imageElement= document.createElement('img')
+                imageElement.src=imageUrl;
+                imageElement.style.height='200px'
+                imageElement.style.width='200px'
+
+                image.innerHTML=''
+                image.appendChild(imageElement)
+
+
+
+
+                name.innerHTML = `Name : ${response.results[0].name.title} ${response.results[0].name.first} ${response.results[0].name.last}`
+                gender.innerHTML = `Gender : ${response.results[0].gender}`
+                email.innerHTML = `Email : ${response.results[0].email}`
+                contact.innerHTML = `Contact : ${response.results[0].phone}`
+                address.innerHTML = `Address : <br>
+                               Street Number : ${response.results[0].location.street.number} <br>
+                               Street Name   : ${response.results[0].location.street.name} <br>
+                               City          : ${response.results[0].location.city}<br>
+                               State         : ${response.results[0].location.state} <br>
+                               Country       : ${response.results[0].location.country}`
+            }
+        }
+        requestApi.send();
+    }
+    nextFunction()
+    nextUser.addEventListener('click', nextFunction)
+    
+</script>
+
+</html>
